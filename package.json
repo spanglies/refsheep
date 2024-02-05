@@ -25,7 +25,7 @@
     "zola-bin": "^0.3.7"
   },
   "scripts": {
-    "watch": "npm-run-all --parallel tailwind:serve vite:serve zola:serve",
+    "watch": "./watch.sh",
     "build": "tsc && cross-env DEV=false npm-run-all zips:build zola:build vite:build",
     "deploy": "docker build . --tag videah/refsheep:latest && docker push videah/refsheep:latest",
     "zola:serve": "zola-bin serve -i 0.0.0.0 -u localhost",
@@ -33,7 +33,7 @@
     "tailwind:serve": "npx tailwindcss -i src/tailwind.css -o static/style.css --watch",
     "zola:build": "zola-bin build",
     "vite:build": "vite build",
-    "zips:build": "./generate_zips.sh"
+    "zips:build": "python Generate_Zips.py"
   },
   "dependencies": {
     "@google/model-viewer": "^2.1.1",
