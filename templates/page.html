@@ -19,6 +19,9 @@
 {% endblock head %}
 
 {% block content %}
+{% if page.extra.config %}
+{% set creditdata = load_data(path=page.extra.config) %}
+{% endif%}
 <article class="animate-in fade-in duration-300">
   <div class="container mx-auto h-screen max-w-5xl p-0 sm:p-4 dark:text-white">
     <div class="flex items-center flex-col pt-4 justify-center">
@@ -40,15 +43,33 @@
           </blurhash-img>
         {% endif %}
         <img width="{{ image.width }}" height="{{ image.height }}" id="ref-sheet" src="{{ image.url }}" data-zoom-src="refsheet.png" data-zoomable/>
+        {% if creditdata %}
+            {% if page.path ~ "refsheet.png" in creditdata.credit %}
+                <a href="{{ creditdata.credit | get(key=page.path ~ "refsheet.png") | get(key="url") }}">
+                <div class="flex items-center font-mono hover:bg-blue-700 hover:opacity-100 border-2 border-zinc-700 hover:border-blue-500 text-white absolute left-2 bottom-2 bg-zinc-800 px-2 py-1 rounded-md opacity-95 transition-all">
+                    <p>Art by {{ creditdata.credit | get(key=page.path ~ "refsheet.png") | get(key="handle") }}</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2">
+                        <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                </a>
+            {% endif %}
+        {% endif %}
+
         {% if page.extra.nsfw_refsheet %}
           {% set image_nsfw = resize_image(path=page.path ~ "refsheet_nsfw.png", height=2048, width=2048, op="fit") %}
           <img class="hidden" width="{{ image_nsfw.width }}" height="{{ image_nsfw.height }}" id="ref-sheet-nsfw" src="{{ image_nsfw.url }}" data-zoom-src="refsheet_nsfw.png" data-zoomable/>
         {% endif %}
-        <div id="nsfw-ref-control" class="cursor-pointer border-2 border-purple-500 hidden opacity-60 hover:opacity-100 transition-all absolute top-2 right-2 min-w-[150px] bg-purple-900 rounded-lg text-white select-none" style="padding: 4px;">
+        {% if page.extra.clothed_refsheet %}
+          {% set image_unclothed = resize_image(path=page.path ~ "refsheet_unclothed.png", height=2048, width=2048, op="fit") %}
+          <img class="hidden" width="{{ image_unclothed.width }}" height="{{ image_unclothed.height }}" id="ref-sheet-unclothed" src="{{ image_unclothed.url }}" data-zoom-src="refsheet_unclothed.png" data-zoomable/>
+        {% endif %}
+        <div id="ref-control" class="cursor-pointer border-2 border-purple-500 {% if page.extra.clothed_refsheet %}{% else %}hidden{% endif %} opacity-60 hover:opacity-100 transition-all absolute top-2 right-2 min-w-[200px] bg-purple-900 rounded-lg text-white select-none" style="padding: 4px;">
           <div class="relative flex items-center">
-            <div id="nsfw-ref-slider" class="absolute left-0 inset-y-0 w-1/2 flex bg-white dark:bg-purple-600 transition-all ease-in-out duration-200 transform rounded-md shadow translate-x-0"></div>
-            <div class="relative flex-1 flex text-sm font-semibold capitalize items-center justify-center m-px p-px">SFW</div>
-            <div class="relative flex-1 flex text-sm font-semibold capitalize items-center justify-center m-px p-px">NSFW</div>
+            <div id="clothed-ref-slider" class="absolute left-0 inset-y-0 w-1/2 flex bg-white dark:bg-purple-600 transition-all ease-in-out duration-200 transform rounded-md shadow translate-x-0"></div>
+            <div class="relative flex-1 flex text-sm font-semibold capitalize items-center justify-center m-px p-px">Clothed</div>
+            <div id="unclothed-nsfw" class="relative flex-1 flex text-sm font-semibold capitalize items-center justify-center m-px p-px">Unclothed</div>
           </div>
         </div>
         {% if page.extra.colors %}
@@ -61,6 +82,12 @@
           {% for color in page.extra.colors %}
             <img id="ref-sheet-{{ color }}-nsfw" class="nsfw-ref-element hidden blinking absolute top-0 left-0 opacity-0 transition pointer-events-none"/>
           {% endfor %}
+
+        <img id="ref-sheet-greyscale-unclothed" class="unclothed-ref-element hidden absolute top-0 left-0 opacity-0 transition pointer-events-none"/>
+          {% for color in page.extra.colors %}
+            <img id="ref-sheet-{{ color }}-unclothed" class="unclothed-ref-element hidden blinking absolute top-0 left-0 opacity-0 transition pointer-events-none"/>
+          {% endfor %}
+
         {% endif %}
       </div>
       <div class="card !mb-4 rounded-lg mx-4 border-2 sm:mx-0">

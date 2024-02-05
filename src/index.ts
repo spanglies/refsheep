@@ -86,6 +86,7 @@ function generatePalleteOverlays() {
 
         const refSheet = document.getElementById("ref-sheet") as HTMLImageElement;
         const nsfwRefSheet = document.getElementById("ref-sheet-nsfw") as HTMLImageElement;
+        const unclothedRefSheet = document.getElementById("ref-sheet-unclothed") as HTMLImageElement;
         if (refSheet) {
 
             // Create a canvas element
@@ -98,46 +99,77 @@ function generatePalleteOverlays() {
                 canvasNsfwElement.width = nsfwRefSheet.naturalWidth;
                 canvasNsfwElement.height = nsfwRefSheet.naturalHeight;
             }
+            const canvasUnclothedElement = document.createElement("canvas");
+            if (unclothedRefSheet){
+                canvasUnclothedElement.width = unclothedRefSheet.naturalWidth;
+                canvasUnclothedElement.height = unclothedRefSheet.naturalHeight;
+            }
 
             // Get the 2D drawing context from the canvas
             const context = canvasElement.getContext("2d");
             const nsfwContext = canvasNsfwElement.getContext("2d");
+            const unclothedContext = canvasUnclothedElement.getContext("2d");
+
 
             if (context) {
                 const imageData = paintOverlay("ref-sheet-greyscale", context, refSheet, canvasElement);
                 let nsfwImageData: ImageData | undefined = undefined;
+                let unclothedImageData: ImageData | undefined = undefined;
+
 
                 // Do the same thing but for the NSFW sheet
                 if (nsfwContext && nsfwRefSheet) {
                     nsfwImageData = paintOverlay("ref-sheet-greyscale-nsfw", nsfwContext, nsfwRefSheet, canvasNsfwElement);
                 }
+                // Do the same thing but for the unclothed sheet
+                if (unclothedContext && unclothedRefSheet) {
+                    unclothedImageData = paintOverlay("ref-sheet-greyscale-unclothed",
+                                                        unclothedContext,
+                                                        unclothedRefSheet,
+                                                        canvasUnclothedElement);
+                }
 
                 const palette = document.getElementById("palette") as HTMLImageElement;
-                palette.addEventListener("mouseover", () => {
+                const greyout = () => {
                     const overlaySheet = document.getElementById("ref-sheet-greyscale") as HTMLImageElement;
                     const overlayNsfwSheet = document.getElementById("ref-sheet-greyscale-nsfw") as HTMLImageElement;
-                    const slider = document.getElementById("nsfw-ref-slider") as HTMLElement;
+                    const overlayUnclothedSheet = document.getElementById("ref-sheet-greyscale-unclothed") as HTMLImageElement;
+                    const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
-                    const sfwSelected = slider.style.transform === "translateX(100%)" ?? true;
-                    if (!sfwSelected) {
+                    const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
+                    const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                    if (!unclothedSelected) {
                         overlaySheet.style.opacity = "100";
-                    } else {
+                    }else if(nsfwToggle.checked) {
                         overlayNsfwSheet.style.opacity = "100";
+                    }else{
+                        overlayUnclothedSheet.style.opacity = "100";
                     }
-                })
-
-                palette.addEventListener("mouseout", () => {
+                };
+                palette.addEventListener("mouseover", greyout);
+                const greyin = () => {
                     const overlaySheet = document.getElementById("ref-sheet-greyscale") as HTMLImageElement;
                     const overlayNsfwSheet = document.getElementById("ref-sheet-greyscale-nsfw") as HTMLImageElement;
-                    const slider = document.getElementById("nsfw-ref-slider") as HTMLElement;
+                    const overlayUnclothedSheet = document.getElementById("ref-sheet-greyscale-unclothed") as HTMLImageElement;
+                    const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
-                    const sfwSelected = slider.style.transform === "translateX(100%)" ?? true;
-                    if (!sfwSelected) {
+                    const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
+                    const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                    if (!unclothedSelected) {
                         overlaySheet.style.opacity = "0";
-                    } else {
+                    } else if(nsfwToggle.checked) {
                         overlayNsfwSheet.style.opacity = "0";
+                    } else{
+                        overlayUnclothedSheet.style.opacity = "0";
                     }
-                })
+                };
+                palette.addEventListener("click",() =>
+                    {
+                        greyout();
+                        setTimeout(greyin, 2000);
+                    });
+
+                palette.addEventListener("mouseout", greyin);
 
                 // Loop over the children and attach an onmouseover event listener to each one
                 for (const color of colors) {
@@ -158,50 +190,75 @@ function generatePalleteOverlays() {
                             }
                         });
                     }
+                    if (unclothedImageData) {
+                        drawOverlay(unclothedImageData, colorValue, parseInt(colorTolerance), true).then((imageData) => {
+                            if (unclothedContext) {
+                                unclothedContext.putImageData(imageData, 0, 0);
+
+                                const overlaySheet = document.getElementById("ref-sheet-".concat(colorValue).concat("-unclothed")) as HTMLImageElement;
+                                overlaySheet.src = canvasUnclothedElement.toDataURL()
+                            }
+                        });
+                    }
 
                     drawOverlay(imageData, colorValue, parseInt(colorTolerance), true).then((imageData) => {
                         context.putImageData(imageData, 0, 0);
 
                         const overlaySheet = document.getElementById("ref-sheet-".concat(colorValue)) as HTMLImageElement;
-                        overlaySheet.src = canvasElement.toDataURL()
-
-                        color.addEventListener("mouseover", () => {
+                        overlaySheet.src = canvasElement.toDataURL();
+                        const colorIn = () => {
                             const colorValue = color.getAttribute("data-color") || "#000000";
                             const overlaySheet = document.getElementById("ref-sheet-".concat(colorValue)) as HTMLImageElement;
                             const overlayNsfwSheet = document.getElementById("ref-sheet-".concat(colorValue).concat("-nsfw")) as HTMLImageElement;
-                            const slider = document.getElementById("nsfw-ref-slider") as HTMLElement;
+                            const overlayUnclothedSheet = document.getElementById("ref-sheet-".concat(colorValue).concat("-unclothed")) as HTMLImageElement;
+                            const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
-                            const sfwSelected = slider.style.transform === "translateX(100%)" ?? true;
-                            if (!sfwSelected) {
+                            const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
+                            const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                            if (!unclothedSelected) {
                                 overlaySheet.style.opacity = "100";
-                            } else {
+                            } else if(nsfwToggle.checked) {
                                 overlayNsfwSheet.style.opacity = "100";
+                            }else{
+                                overlayUnclothedSheet.style.opacity = "100";
                             }
-                        })
-
-                        color.addEventListener("mouseout", () => {
+                        }
+                        color.addEventListener("mouseover", colorIn)
+                        const colorOut = () => {
                             const colorValue = color.getAttribute("data-color") || "#000000";
                             const overlaySheet = document.getElementById("ref-sheet-".concat(colorValue)) as HTMLImageElement;
                             const overlayNsfwSheet = document.getElementById("ref-sheet-".concat(colorValue).concat("-nsfw")) as HTMLImageElement;
-                            const slider = document.getElementById("nsfw-ref-slider") as HTMLElement;
+                            const overlayUnclothedSheet = document.getElementById("ref-sheet-".concat(colorValue).concat("-unclothed")) as HTMLImageElement;
+                            const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
-                            const sfwSelected = slider.style.transform === "translateX(100%)" ?? true;
-                            if (!sfwSelected) {
+                            const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
+                            const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                            if (!unclothedSelected) {
                                 overlaySheet.style.opacity = "0";
-                            } else {
+                            } else if(nsfwToggle.checked) {
                                 overlayNsfwSheet.style.opacity = "0";
+                            }else{
+                                overlayUnclothedSheet.style.opacity = "0";
                             }
                             const span = color.children[0] as HTMLSpanElement;
                             span.classList.add("group-hover:text-xl");
                             span.innerText = colorValue;
+                        };
+
+                        color.addEventListener("mouseout", colorOut)
+                        color.addEventListener("click", () => {
+                            colorIn();
+                            setTimeout(colorOut, 2000);
                         })
                     });
 
                     color.addEventListener("click", () => {
+
                         const span = color.children[0] as HTMLSpanElement;
                         span.classList.remove("group-hover:text-xl");
                         copy(colorValue);
-                        span.innerText = "Copied!"
+                        span.innerText = "Copied!";
+
                     })
                 }
             }
@@ -217,7 +274,7 @@ function unhideNSFW() {
     const nsfw = urlParams.get('nsfw');
 
     // If the nsfw parameter is true, unhide all elements with the class "nsfw"
-    if (nsfw) {
+    if (nsfw && !["no", "false"].includes(nsfw.toLowerCase())) {
         // get all <a> tags with the class "card-link"
         const characters = document.querySelectorAll<HTMLLinkElement>(".card-link");
         characters.forEach((element) => {
@@ -232,7 +289,7 @@ function unhideNSFW() {
         const nsfwDescription = document.getElementById("nsfw-description") as HTMLElement;
         nsfwDescription.classList.remove("hidden");
 
-        const refToggle = document.getElementById("nsfw-ref-control") as HTMLElement;
+        const refToggle = document.getElementById("ref-control") as HTMLElement;
         const nsfwRefSheet = document.getElementById("ref-sheet-nsfw") as HTMLImageElement;
         if (nsfwRefSheet) refToggle.classList.remove("hidden");
 
@@ -271,20 +328,33 @@ function attachNSFWToggle() {
                 }
             }
 
+            const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
+            const unclothedSelector = slider.style.transform === "translateX(100%)" ?? true;
+            const unclothedRefSheet = document.getElementById("ref-sheet-unclothed")  as HTMLElement;
             if (!nsfwToggle.checked) {
                 const refSheet = document.getElementById("ref-sheet") as HTMLElement;
                 const nsfwRefSheet = document.getElementById("ref-sheet-nsfw") as HTMLElement;
-                const slider = document.getElementById("nsfw-ref-slider") as HTMLElement;
-                const control = document.getElementById("nsfw-ref-control") as HTMLElement;
-                slider.style.transform = "translateX(0px)";
 
-                refSheet.classList.remove("hidden");
+                const control = document.getElementById("ref-control") as HTMLElement;
+
+                if (!unclothedRefSheet) {
+                    slider.style.transform = "translateX(0px)";
+                    refSheet.classList.remove("hidden");
+                    control.classList.add("hidden");
+                }
+                else if(unclothedSelector)
+                    unclothedRefSheet.classList.remove("hidden");
+                else refSheet.classList.remove("hidden");
                 if (nsfwRefSheet) nsfwRefSheet.classList.add("hidden");
-                control.classList.add("hidden");
+
             } else {
-                const control = document.getElementById("nsfw-ref-control") as HTMLElement;
+                const control = document.getElementById("ref-control") as HTMLElement;
                 const nsfwRefSheet = document.getElementById("ref-sheet-nsfw") as HTMLElement;
-                if (nsfwRefSheet) control.classList.remove("hidden");
+                if (nsfwRefSheet) {
+                    control.classList.remove("hidden");
+                    if (unclothedSelector) nsfwRefSheet.classList.remove("hidden");
+                    if (unclothedRefSheet) unclothedRefSheet.classList.add("hidden")
+                }
             }
             const masonry = document.querySelector("masonry-layout");
             if (masonry) masonry.layout();
@@ -318,45 +388,63 @@ function renderBlurhashes() {
     }
 }
 
-function attachRefToggleSwitch() {
-    const refToggle = document.getElementById("nsfw-ref-control") as HTMLElement;
-    if (refToggle) {
-        refToggle.addEventListener("click", () => {
+function toggleRef(){
             const refSheet = document.getElementById("ref-sheet") as HTMLElement;
             const nsfwRefSheet = document.getElementById("ref-sheet-nsfw") as HTMLElement;
+            const unclothedRefSheet = document.getElementById("ref-sheet-unclothed") as HTMLElement;
 
-            const slider = document.getElementById("nsfw-ref-slider") as HTMLElement;
-            const sfwSelected = slider.style.transform === "translateX(100%)" ?? true;
-            slider.style.transform = sfwSelected ? "translateX(0px)" : "translateX(100%)";
+            const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
+
+            const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
+            const clothedSelector = slider.style.transform === "translateX(100%)" ?? true;
+            slider.style.transform = clothedSelector ? "translateX(0px)" : "translateX(100%)";
 
             // get all ref-elements
             const refElements = Array.from(document.querySelectorAll<HTMLElement>(".ref-element"));
             const nsfwRefElements = Array.from(document.querySelectorAll<HTMLElement>(".nsfw-ref-element"));
-            if (sfwSelected) {
+            const unclothedRefElements = Array.from(document.querySelectorAll<HTMLElement>(".unclothed-ref-element"));
+            if (clothedSelector) {
                 refSheet.classList.remove("hidden");
                 if (nsfwRefSheet) nsfwRefSheet.classList.add("hidden");
+                if (unclothedRefSheet) unclothedRefSheet.classList.add("hidden");
 
                 refElements.forEach((element) => {
                     element.classList.remove("hidden");
                 });
 
                 nsfwRefElements.forEach((element) => {
+                    element.classList.add("hidden");
+                });
+                unclothedRefElements.forEach((element) => {
                     element.classList.add("hidden");
                 });
             } else {
                 refSheet.classList.add("hidden");
-                if (nsfwRefSheet) nsfwRefSheet.classList.remove("hidden");
+                if(nsfwToggle.checked){
+                    if (nsfwRefSheet) nsfwRefSheet.classList.remove("hidden");
 
+                }else{
+                    if (unclothedRefSheet) unclothedRefSheet.classList.remove("hidden");
+
+                }
+                unclothedRefElements.forEach((element) => {
+                    element.classList.remove("hidden");
+                });
+                nsfwRefElements.forEach((element) => {
+                    element.classList.remove("hidden");
+                });
                 refElements.forEach((element) => {
                     element.classList.add("hidden");
                 });
 
-                nsfwRefElements.forEach((element) => {
-                    element.classList.remove("hidden");
-                });
             }
             console.log(slider.style.transform);
-        });
+        }
+
+function attachRefToggleSwitch() {
+    const refToggle = document.getElementById("ref-control") as HTMLElement;
+    if (refToggle) {
+        refToggle.addEventListener("click", toggleRef);
     }
 }
 
