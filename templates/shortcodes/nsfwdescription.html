@@ -1,4 +1,5 @@
-{% set data = load_data(path=path) %}
+{% set data = load_data(path=path, required=false) %}
+{% if data %}
 <div id="nsfw-description" class="card p-6 max-w-full prose dark:prose-invert prose-zinc grid-item bg-purple-700 dark:bg-purple-900 border-purple-300 dark:border-purple-600 text-white {% if page.extra.require_nsfw_in_url %} hidden {% endif %}">
     <h2 class="font-semibold text-3xl mb-2">⚠️ Content Warning ⚠️</h2>
     <p>This page contains some content that's not suitable for people under the age of 18.</p>
@@ -16,3 +17,4 @@
         <p>If you feel these topics might make you uncomfortable you might want to disable NSFW content or leave the page.</p>
     {% endif %}
 </div>
+{% endif %}

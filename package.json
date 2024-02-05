@@ -17,27 +17,28 @@
     "medium-zoom": "^1.0.8",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.0.0",
-    "postcss": "^8.4.20",
+    "postcss": "^8.4.31",
     "tailwindcss": "^3.1.8",
     "tailwindcss-animate": "^1.0.5",
     "typescript": "^4.9.4",
-    "vite": "^4.0.0",
+    "vite": "~4.0.0",
     "zola-bin": "^0.3.7"
   },
   "scripts": {
     "watch": "npm-run-all --parallel tailwind:serve vite:serve zola:serve",
     "build": "tsc && cross-env DEV=false npm-run-all zips:build zola:build vite:build",
     "deploy": "docker build . --tag videah/refsheep:latest && docker push videah/refsheep:latest",
-    "zola:serve": "zola serve -i 0.0.0.0 -u localhost",
+    "zola:serve": "zola-bin serve -i 0.0.0.0 -u localhost",
     "vite:serve": "vite",
     "tailwind:serve": "npx tailwindcss -i src/tailwind.css -o static/style.css --watch",
-    "zola:build": "zola build",
+    "zola:build": "zola-bin build",
     "vite:build": "vite build",
     "zips:build": "./generate_zips.sh"
   },
   "dependencies": {
     "@google/model-viewer": "^2.1.1",
     "camelcase": "^7.0.1",
-    "copy-to-clipboard": "^3.3.3"
+    "copy-to-clipboard": "^3.3.3",
+    "node-gyp": "^9.3.1"
   }
 }

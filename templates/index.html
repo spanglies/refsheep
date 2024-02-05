@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mx-auto h-screen">
     <div class="flex flex-col justify-center min-h-full">
-        <h1 class="mb-8 p-8 text-center dark:text-white text-6xl font-bold">Videah's References</h1>
+        <h1 class="mb-8 p-8 text-center dark:text-white text-6xl font-bold">Example's References</h1>
         <div class="flex-col md:flex-row flex gap-8 items-center justify-center animate-in fade-in duration-500">
             {% for character in section.pages %}
                 {{ macros::character_tile(character=character) }}

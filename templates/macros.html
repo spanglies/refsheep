@@ -1,5 +1,5 @@
 {% macro character_tile(character) %}
-<a class="card-link" href="{{ character.permalink | safe }}">
+<a class="card-link" href="{{ character.slug | safe }}">
   <div class="flex flex-row md:flex-col hover:border-blue-500 cursor-pointer border-2 transition sm:hover:scale-105 dark:border-zinc-700 dark:bg-zinc-800 bg-white shadow-md rounded-lg md:max-w-[350px] overflow-auto">
     <div class="flex-initial max-w-[150px] md:max-w-full w-full">
       <img width="350px" height="350px" class="h-full object-cover w-full dark:bg-zinc-700" src="{{ character.path ~ "icon.png" }}" alt="{{ character.title }}">
