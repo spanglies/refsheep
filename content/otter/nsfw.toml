@@ -1,0 +1,9 @@
+
+[credit."/otter/gallery_nsfw/bj_in_the_desert.png"]
+handle = "Cleini Arkent"
+url = "https://twitter.com/CleiArkent"
+
+[nsfw]
+about = "This info appears in an extra black box as part of an existing card"
+content_warnings = ['This info is meant to be content warnings and appears in a purple box',
+'you can have multiple types of content seperate from each other']
