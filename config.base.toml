@@ -12,6 +12,7 @@ highlight_code = false
 [extra]
 # Put all your custom variables here
 blurhash = false
+CDN = "https://example.org"
 # umami_domain = "analytics.videah.net"
 # umami_id = "6ad419cc-112a-4486-a258-b799bb58ffaf"
 # umami_track_domain = "refs.videah.net"
