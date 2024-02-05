@@ -272,6 +272,7 @@ function unhideNSFW() {
 
     // Get the value of the nsfw parameter
     const nsfw = urlParams.get('nsfw');
+    const sheet = urlParams.get('sheet');
 
     // If the nsfw parameter is true, unhide all elements with the class "nsfw"
     if (nsfw && !["no", "false"].includes(nsfw.toLowerCase())) {
@@ -307,6 +308,9 @@ function unhideNSFW() {
             }
             element.style.display = "block";
         }
+    }
+    if (sheet && (["nsfw","unclothed","nude","naked","secondary","2"].includes(sheet.toLowerCase()) )){
+        toggleRef()
     }
 }
 
