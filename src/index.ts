@@ -284,20 +284,25 @@ function unhideNSFW() {
 
         const nsfwToggleCard = document.getElementById("nsfw-toggle-card") as HTMLElement;
         const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
-        nsfwToggleCard.classList.remove("hidden");
-        nsfwToggle.checked = true;
-
+        if (!(nsfwToggleCard === null)) {
+            nsfwToggleCard.classList.remove("hidden");
+            nsfwToggle.checked = true;
+        }
         const nsfwDescription = document.getElementById("nsfw-description") as HTMLElement;
-        nsfwDescription.classList.remove("hidden");
+        if (!(nsfwDescription === null))
+            nsfwDescription.classList.remove("hidden");
 
         const refToggle = document.getElementById("ref-control") as HTMLElement;
         const nsfwRefSheet = document.getElementById("ref-sheet-nsfw") as HTMLImageElement;
-        if (nsfwRefSheet) refToggle.classList.remove("hidden");
+        if (!(nsfwRefSheet) === null)
+            refToggle.classList.remove("hidden");
 
         const zipButton = document.getElementById("zip-button") as HTMLLinkElement;
         const zipText = document.getElementById("zip-text") as HTMLElement;
-        zipButton.href = zipButton.href.replace(".zip", "_nsfw.zip");
-        zipText.innerText += " (NSFW)";
+        if (!(zipButton === null)) {
+            zipButton.href = zipButton.href.replace(".zip", "_nsfw.zip");
+            zipText.innerText += " (NSFW)";
+        }
 
         const nsfwElements = Array.from(document.querySelectorAll<HTMLElement>(".nsfw, .nsfw-box"));
         for (const element of nsfwElements) {
