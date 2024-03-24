@@ -1,7 +1,7 @@
 import './tailwind.css'
 //import blurhashes from './blurhash-map.json';
 
-import 'vite/types/importMeta.d';
+// import 'vite/types/importMeta.d';
 
 // Prevent Vite from reloading the page since Zola is handling that.
 // https://github.com/vitejs/vite/issues/6695#issuecomment-1069522995
