@@ -10,6 +10,6 @@ if __name__ == "__main__":
         upload_s3()
     elif env_from_dir and env_to_dir:
         print("uploading static references")
-        upload_s3(from_dir=env_from_dir, to_dir=env_to_dir)
+        upload_s3(from_dir=env_from_dir, to_dir=env_to_dir, file_name=os.getenv("file_to_copy"), force=os.getenv("FORCE_S3_UPLOAD"))
     else:
         print(f"Skipping uploads (CF_PAGES_BRANCH={cf_pages_branch})")

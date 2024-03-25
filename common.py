@@ -17,33 +17,38 @@ def connect_s3():
     return bucket_id, s3
 
 
-def upload_s3(from_dir=None, to_dir=None):
+def upload_file(from_dir, to_dir, item, bucket_id, s3, force):
+    with io.FileIO(f"{from_dir}/{item}") as file:
+        remote_file = s3.ObjectSummary(bucket_name=bucket_id, key=f'{to_dir}/{item}').Object()
+        try:
+            remote_file.load()
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "404":
+                remote_file.put(Body=file)
+                print(f"uploaded {to_dir}/{item}")
+            else:
+                raise e
+        else:
+            # TODO better check if file has changed and upload.
+            if force or (remote_file.content_length != os.stat(f"{from_dir}/{item}").st_size):
+                remote_file.put(Body=file)
+                print(f"uploaded {to_dir}/{item}")
+
+            print(f"skipping {to_dir}/{item}")
+
+
+def upload_s3(from_dir=None, to_dir=None, file_name=None, force=False):
     if from_dir is None:
         from_dir = "public/zips"
     if to_dir is None:
         to_dir = "zips"
 
     bucket_id, s3 = connect_s3()
+    if file_name:
+        return upload_file(from_dir, to_dir, file_name, bucket_id, s3,force)
 
     for item in os.listdir(from_dir):
-        with io.FileIO(f"{from_dir}/{item}") as file:
-            remote_file = s3.ObjectSummary(bucket_name=bucket_id, key=f'{to_dir}/{item}').Object()
-            try:
-                remote_file.load()
-            except botocore.exceptions.ClientError as e:
-                if e.response['Error']['Code'] == "404":
-                    remote_file.put(Body=file)
-                    print(f"uploaded {to_dir}/{item}")
-                else:
-                    raise e
-            else:
-                # TODO better check if file has changed and upload.
-                if remote_file.content_length != os.stat(f"{from_dir}/{item}").st_size:
-                    remote_file.put(Body=file)
-                    print(f"uploaded {to_dir}/{item}")
-
-                print(f"skipping {to_dir}/{item}")
-
+        upload_file(from_dir, to_dir, item, bucket_id, s3, force=force)
 
 
 def download_static_refs():
