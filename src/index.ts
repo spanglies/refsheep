@@ -137,7 +137,7 @@ function generatePalleteOverlays() {
                     const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
                     const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
-                    const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                    const unclothedSelected = slider.style.transform === "translateX(100%)";
                     if (!unclothedSelected) {
                         overlaySheet.style.opacity = "100";
                     }else if(nsfwToggle.checked) {
@@ -154,7 +154,7 @@ function generatePalleteOverlays() {
                     const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
                     const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
-                    const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                    const unclothedSelected = slider.style.transform === "translateX(100%)";
                     if (!unclothedSelected) {
                         overlaySheet.style.opacity = "0";
                     } else if(nsfwToggle.checked) {
@@ -214,7 +214,7 @@ function generatePalleteOverlays() {
                             const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
                             const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
-                            const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                            const unclothedSelected = slider.style.transform === "translateX(100%)";
                             if (!unclothedSelected) {
                                 overlaySheet.style.opacity = "100";
                             } else if(nsfwToggle.checked) {
@@ -232,7 +232,7 @@ function generatePalleteOverlays() {
                             const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
                             const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
-                            const unclothedSelected = slider.style.transform === "translateX(100%)" ?? true;
+                            const unclothedSelected = slider.style.transform === "translateX(100%)";
                             if (!unclothedSelected) {
                                 overlaySheet.style.opacity = "0";
                             } else if(nsfwToggle.checked) {
@@ -338,7 +338,7 @@ function attachNSFWToggle() {
             }
 
             const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
-            const unclothedSelector = slider.style.transform === "translateX(100%)" ?? true;
+            const unclothedSelector = slider.style.transform === "translateX(100%)";
             const unclothedRefSheet = document.getElementById("ref-sheet-unclothed")  as HTMLElement;
             if (!nsfwToggle.checked) {
                 const refSheet = document.getElementById("ref-sheet") as HTMLElement;
@@ -405,7 +405,7 @@ function toggleRef(){
             const slider = document.getElementById("clothed-ref-slider") as HTMLElement;
 
             const nsfwToggle = document.getElementById("nsfw-toggle") as HTMLInputElement;
-            const clothedSelector = slider.style.transform === "translateX(100%)" ?? true;
+            const clothedSelector = slider.style.transform === "translateX(100%)";
             slider.style.transform = clothedSelector ? "translateX(0px)" : "translateX(100%)";
 
             // get all ref-elements
