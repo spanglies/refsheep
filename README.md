@@ -24,7 +24,7 @@ I've also added boto3 support to download static references via python
 - This repo is set up to be used with Cloudflare's Pages framework and R2 (an S3 compatible storage system). Zip files
 are stored on R2 due to size limitation on cloudflare pages
 ## Usage
-Prerequisites: Yarn 1.22, NodeJS (tested with nodejs 18 and 20), npm, python 3.11
+Prerequisites: Yarn 1.22, NodeJS (This lockfile now requires 20+), npm, python 3.11+
 
 This repo is tested to run on Manjaro Linux (as of Feb 2024) and Cloudflare's Ubunutu based Pages agents on platform 2.0
 
