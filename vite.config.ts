@@ -8,6 +8,7 @@ export default defineConfig({
     build: {
         lib: {
             fileName: 'script',
+            cssFileName: 'style',
             entry: 'src/index.ts',
             formats: ['es'],
         },
