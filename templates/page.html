@@ -67,7 +67,7 @@
         {% endif %}
         <div id="ref-control" class="cursor-pointer border-2 border-purple-500 {% if page.extra.clothed_refsheet %}{% else %}hidden{% endif %} opacity-60 hover:opacity-100 transition-all absolute top-2 right-2 min-w-[200px] bg-purple-900 rounded-lg text-white select-none" style="padding: 4px;">
           <div class="relative flex items-center">
-            <div id="clothed-ref-slider" class="absolute left-0 inset-y-0 w-1/2 flex bg-white dark:bg-purple-600 transition-all ease-in-out duration-200 transform rounded-md shadow translate-x-0"></div>
+            <div id="clothed-ref-slider" class="absolute left-0 inset-y-0 w-1/2 flex bg-white dark:bg-purple-600 transition-all ease-in-out duration-200 transform rounded-md shadow-sm translate-x-0"></div>
             <div class="relative flex-1 flex text-sm font-semibold capitalize items-center justify-center m-px p-px">Clothed</div>
             <div id="unclothed-nsfw" class="relative flex-1 flex text-sm font-semibold capitalize items-center justify-center m-px p-px">Unclothed</div>
           </div>
@@ -90,7 +90,7 @@
 
         {% endif %}
       </div>
-      <div class="card !mb-4 rounded-lg mx-4 border-2 sm:mx-0">
+      <div class="card mb-4! rounded-lg mx-4 border-2 sm:mx-0">
         {% if page.extra.colors %}
         <div id="palette" class="grid grid-auto-fit-[8rem] sm:grid-auto-fit-sm">
           {% for color in page.extra.colors %}

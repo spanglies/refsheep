@@ -4,10 +4,10 @@
   "devDependencies": {
     "@appnest/masonry-layout": "^2.0.8",
     "@shrutibalasa/tailwind-grid-auto-fit": "^1.1.0",
+    "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/typography": "^0.5.4",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
-    "autoprefixer": "^10.4.13",
     "blurhash-img": "^0.2.1",
     "concurrently": "^9.2.0",
     "cross-env": "^7.0.3",
@@ -30,15 +30,17 @@
     "deploy": "docker build . --tag videah/refsheep:latest && docker push videah/refsheep:latest",
     "zola:serve": "zola-bin serve -i 0.0.0.0 -u localhost",
     "vite:serve": "vite",
-    "tailwind:serve": "npx tailwindcss -i src/tailwind.css -o static/style.css --watch",
+    "tailwind:serve": "npx @tailwindcss/cli -i src/tailwind.css -o static/style.css --watch",
     "zola:build": "zola-bin build",
     "vite:build": "vite build",
     "zips:build": "python Generate_Zips.py"
   },
   "dependencies": {
     "@google/model-viewer": "^4.1.0",
+    "@tailwindcss/cli": "^4.1.11",
     "camelcase": "^8.0.0",
     "copy-to-clipboard": "^3.3.3",
-    "node-gyp": "^11.2.0"
+    "node-gyp": "^11.2.0",
+    "three": "^0.178.0"
   }
 }

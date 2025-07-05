@@ -1,22 +1,40 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@layer components {
-    .card {
-        @apply border-y-2 sm:border-x-2 dark:border-zinc-700 dark:bg-zinc-800 bg-white shadow-md sm:rounded-lg overflow-auto;
-    }
-    .nsfw, .nsfw-box {
-        @apply hidden transition animate-in fade-in duration-300;
-    }
+@config '../tailwind.config.cjs';
 
-    .nsfw-box{
-        @apply border-2 border-purple-500 text-white font-sans;
-    }
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
 
-    .card > * > a {
-        @apply text-blue-400 no-underline hover:underline;
-    }
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility card {
+  @apply border-y-2 sm:border-x-2 dark:border-zinc-700 dark:bg-zinc-800 bg-white shadow-md sm:rounded-lg overflow-auto;
+
+  & > * > a {
+    @apply text-blue-400 no-underline hover:underline;
+  }
+}
+
+@utility nsfw {
+  @apply hidden transition animate-in fade-in duration-300;
+}
+
+@utility nsfw-box {
+  @apply hidden transition animate-in fade-in duration-300;
+  @apply border-2 border-purple-500 text-white font-sans;
 }
 
 .blinking {
