@@ -23,11 +23,13 @@ It is arguably overengineered. It is meant to serve my own purposes and if other
 - This repo is set up to be used with Cloudflare's Pages framework and R2 (an S3 compatible storage system). Zip files
 are stored on R2 due to size limitation on cloudflare pages
 ## Usage
-Prerequisites: NodeJS (This lockfile now requires 20+), npm with corepack enabled, python 3.11+
+Prerequisites: NodeJS, npm with corepack enabled, python 3.11+, [Zola](https://www.getzola.org/documentation/getting-started/installation/)
 
-This repo is tested to run on Manjaro Linux (as of Jan 2026) and Cloudflare's Ubunutu based Pages agents on platform 3.0
+This repo is tested to run on Manjaro Linux (as of Jan 2026) and Cloudflare's Ubuntu based Pages agents on platform 3.0.
+Running on cloudflare pages v2/v3 requires using the undocumented env variable: 
+`UNSTABLE_PRE_BUILD="asdf plugin add zola https://github.com/salasrod/asdf-zola && asdf install zola latest && asdf global zola latest"`
 
-It should not require any additional steps to compile and run this project aside from the below with the above prereq's installed:
+Assuming the prereq's are installed the following should get you rolling:
 ```bash
 # Install necessary dependencies
 # you may need to specify --pure-lockfile
@@ -42,7 +44,7 @@ pip install -r requirements.txt
 yarn build
 
 # Build and upload relevant zips to s3 compatible host (tested with Cloudflare R2)
-# Tested to run on Cloudflare's build agent for pag. This is what powers refs.eedq.org
+# Tested to run on Cloudflare's build agent for pages. This is what powers refs.eedq.org
 ./build.sh 
 
 # Build a Caddy web server docker image with refsheep embeded inside
