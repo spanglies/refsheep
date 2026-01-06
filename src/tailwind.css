@@ -10,6 +10,13 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+@utility card {
+    @apply border-y-2 sm:border-x-2 dark:border-zinc-700 dark:bg-zinc-800 bg-white shadow-md sm:rounded-lg overflow-auto;
+
+    & > * > a {
+        @apply text-blue-400 no-underline hover:underline;
+    }
+}
 @layer base {
   *,
   ::after,
@@ -20,13 +27,7 @@
   }
 }
 
-@utility card {
-  @apply border-y-2 sm:border-x-2 dark:border-zinc-700 dark:bg-zinc-800 bg-white shadow-md sm:rounded-lg overflow-auto;
 
-  & > * > a {
-    @apply text-blue-400 no-underline hover:underline;
-  }
-}
 
 @utility nsfw {
   @apply hidden transition animate-in fade-in duration-300;

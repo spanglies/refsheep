@@ -4,6 +4,7 @@
   "devDependencies": {
     "@appnest/masonry-layout": "^2.0.8",
     "@shrutibalasa/tailwind-grid-auto-fit": "^1.1.0",
+    "@tailwindcss/cli": "^4.1.11",
     "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/typography": "^0.5.4",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
@@ -21,12 +22,11 @@
     "tailwindcss": "^4.1.11",
     "tailwindcss-animate": "^1.0.5",
     "typescript": "^5.8.3",
-    "vite": "^7.0.1"
+    "vite": "7.1.11"
   },
   "scripts": {
     "watch": "./watch.sh",
     "build": "tsc && cross-env DEV=false npm-run-all zips:build zola:build vite:build",
-    "deploy": "docker build . --tag videah/refsheep:latest && docker push videah/refsheep:latest",
     "zola:serve": "zola serve -i 0.0.0.0 -u localhost",
     "vite:serve": "vite",
     "tailwind:serve": "npx @tailwindcss/cli -i src/tailwind.css -o static/style.css --watch",
@@ -36,10 +36,10 @@
   },
   "dependencies": {
     "@google/model-viewer": "^4.1.0",
-    "@tailwindcss/cli": "^4.1.11",
     "camelcase": "^8.0.0",
     "copy-to-clipboard": "^3.3.3",
     "node-gyp": "^11.2.0",
     "three": "~0.172.0"
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }

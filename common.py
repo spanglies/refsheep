@@ -20,21 +20,22 @@ def connect_s3():
 def upload_file(from_dir, to_dir, item, bucket_id, s3, force):
     with io.FileIO(f"{from_dir}/{item}") as file:
         remote_file = s3.ObjectSummary(bucket_name=bucket_id, key=f'{to_dir}/{item}').Object()
+        final = "skipped"
         try:
             remote_file.load()
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 remote_file.put(Body=file)
-                print(f"uploaded {to_dir}/{item}")
+                final = "uploaded"
             else:
                 raise e
         else:
             # TODO better check if file has changed and upload.
             if force or (remote_file.content_length != os.stat(f"{from_dir}/{item}").st_size):
                 remote_file.put(Body=file)
-                print(f"uploaded {to_dir}/{item}")
+                final = "uploaded"
 
-            print(f"skipping {to_dir}/{item}")
+        print(f"{final} {to_dir}/{item}")
 
 
 def upload_s3(from_dir=None, to_dir=None, file_name=None, force=False):

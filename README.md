@@ -7,11 +7,10 @@ You can see _this repo_ in action at [refs.eedq.org](https://refs.eedq.org/otter
 or what it's based on at [refs.videah.net/videah](https://refs.videah.net/videah/)
 
 
-It is built on top of [Zola](https://www.getzola.org), [Vite](https://vitejs.dev), and [Tailwind](https://tailwindcss.com)
-python and nodejs.
+It is built on top of Nodejs, [Zola](https://www.getzola.org), [Vite](https://vitejs.dev), and [Tailwind](https://tailwindcss.com),
+with python as a glue for the build.
 It is arguably overengineered. It is meant to serve my own purposes and if other people find use out of it that's just a nice bonus.
 
-I've added boto3 support to download static references via python
 ### Features
 - Automatic color pallete indicator buttons that highlight parts of ref sheets
 - Fully responsive and automatic mosiac card layout
@@ -24,10 +23,9 @@ I've added boto3 support to download static references via python
 - This repo is set up to be used with Cloudflare's Pages framework and R2 (an S3 compatible storage system). Zip files
 are stored on R2 due to size limitation on cloudflare pages
 ## Usage
-Prerequisites: Yarn 1.22 (This repo now works with Yarn 2+), NodeJS (This lockfile now requires 20+), npm, python 3.11+
-(I've also had to install Zola seperately at the OS level or using asdf directives on cloudflare pages)
+Prerequisites: NodeJS (This lockfile now requires 20+), npm with corepack enabled, python 3.11+
 
-This repo is tested to run on Manjaro Linux (as of Feb 2025) and Cloudflare's Ubunutu based Pages agents on platform 3.0
+This repo is tested to run on Manjaro Linux (as of Jan 2026) and Cloudflare's Ubunutu based Pages agents on platform 3.0
 
 It should not require any additional steps to compile and run this project aside from the below with the above prereq's installed:
 ```bash
